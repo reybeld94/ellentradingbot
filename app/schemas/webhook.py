@@ -8,7 +8,7 @@ class TradingViewWebhook(BaseModel):
     symbol: str
     action: str  # "buy" or "sell"
     strategy_id: str  # Identificador único de la estrategia
-    quantity: Optional[int] = None
+    quantity: Optional[float] = None
     price: Optional[float] = None
     message: Optional[str] = None
 
