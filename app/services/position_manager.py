@@ -128,3 +128,4 @@ class PositionManager:
 # Instancia global
 position_manager = PositionManager()
 
+
