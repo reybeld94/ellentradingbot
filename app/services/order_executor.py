@@ -1,9 +1,7 @@
 # backend/app/services/order_executor.py
 
-from sqlalchemy.orm import Session
 from ..integrations.alpaca.client import alpaca_client
 from ..models.signal import Signal
-from ..config import settings
 from .position_manager import position_manager
 from .strategy_position_manager import StrategyPositionManager
 from ..database import get_db
