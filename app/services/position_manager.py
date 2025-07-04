@@ -2,6 +2,7 @@
 
 from ..integrations.alpaca.client import alpaca_client
 from ..models.signal import Signal
+from ..utils.symbols import map_symbol_to_alpaca
 import logging
 
 logger = logging.getLogger(__name__)
@@ -24,7 +25,8 @@ class PositionManager:
     def get_position_quantity(self, symbol):
         """Obtener cantidad específica de un símbolo"""
         try:
-            position = self.alpaca.get_position(symbol)
+            mapped_symbol = map_symbol_to_alpaca(symbol)
+            position = self.alpaca.get_position(mapped_symbol)
             return float(position.qty) if position else 0.0
         except Exception:
             return 0.0

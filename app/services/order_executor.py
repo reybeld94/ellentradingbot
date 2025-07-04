@@ -7,6 +7,7 @@ from ..config import settings
 from .position_manager import position_manager
 from .strategy_position_manager import StrategyPositionManager
 from ..database import get_db
+from ..utils.symbols import map_symbol_to_alpaca
 import logging
 
 logger = logging.getLogger(__name__)
@@ -21,13 +22,6 @@ class OrderExecutor:
         """Verificar si es un símbolo de crypto"""
         return '/' in symbol or symbol.endswith('USD')
 
-    def map_symbol_to_alpaca(self, symbol):
-        """Convertir símbolos de TradingView a formato Alpaca"""
-        symbol_map = {
-            'BTCUSD': 'BTC/USD',
-            'ETHUSD': 'ETH/USD',
-        }
-        return symbol_map.get(symbol, symbol)
 
     def calculate_position_size(self, symbol, action):
         """Calcular tamaño de posición (10% del capital)"""
@@ -38,7 +32,7 @@ class OrderExecutor:
         position_value = buying_power * 0.10
 
         # Obtener precio actual
-        mapped_symbol = self.map_symbol_to_alpaca(symbol)
+        mapped_symbol = map_symbol_to_alpaca(symbol)
         if self.is_crypto(symbol):
             quote = self.alpaca.get_latest_crypto_quote(mapped_symbol)
         else:
@@ -92,7 +86,7 @@ class OrderExecutor:
         account = self.alpaca.get_account()
         available_cash = float(account.cash)
 
-        mapped_symbol = self.map_symbol_to_alpaca(signal.symbol)
+        mapped_symbol = map_symbol_to_alpaca(signal.symbol)
         if self.is_crypto(signal.symbol):
             quote = self.alpaca.get_latest_crypto_quote(mapped_symbol)
         else:
@@ -137,7 +131,7 @@ class OrderExecutor:
         quantity_to_sell = strategy_position.quantity
         signal.quantity = quantity_to_sell
 
-        mapped_symbol = self.map_symbol_to_alpaca(signal.symbol)
+        mapped_symbol = map_symbol_to_alpaca(signal.symbol)
         if self.is_crypto(signal.symbol):
             order = self.alpaca.submit_crypto_order(
                 symbol=mapped_symbol,
