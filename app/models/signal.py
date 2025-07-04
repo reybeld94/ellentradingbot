@@ -11,8 +11,10 @@ class Signal(Base):
     id = Column(Integer, primary_key=True, index=True)
     symbol = Column(String(10), nullable=False, index=True)
     action = Column(String(10), nullable=False)  # buy, sell
-    strategy_id = Column(String(50), nullable=False, index=True)  # NUEVO: identificador de estrategia
-    quantity = Column(Integer, nullable=True)
+    strategy_id = Column(
+        String(50), nullable=False, index=True
+    )  # NUEVO: identificador de estrategia
+    quantity = Column(Float, nullable=True)
     price = Column(Float, nullable=True)
     source = Column(String(50), default="tradingview")
     timestamp = Column(DateTime, server_default=func.now())
@@ -21,9 +23,13 @@ class Signal(Base):
     error_message = Column(Text, nullable=True)
 
     # Campos para análisis avanzado
-    reason = Column(String(50), nullable=True)  # fibonacci_entry, fibonacci_exit, trailing_stop
+    reason = Column(
+        String(50), nullable=True
+    )  # fibonacci_entry, fibonacci_exit, trailing_stop
     confidence = Column(Integer, nullable=True)  # Score 0-100
-    tv_timestamp = Column(String(50), nullable=True)  # Timestamp original de TradingView
+    tv_timestamp = Column(
+        String(50), nullable=True
+    )  # Timestamp original de TradingView
 
     def __repr__(self):
         return f"<Signal({self.strategy_id}:{self.symbol}, {self.action}, {self.status}, conf:{self.confidence})>"

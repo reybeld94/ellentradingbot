@@ -126,7 +126,9 @@ class OrderExecutor:
         if strategy_position.quantity <= 0:
             raise ValueError(f"Strategy {signal.strategy_id} has no position in {signal.symbol} to sell")
 
-        quantity_to_sell = min(signal.quantity, strategy_position.quantity)
+        # Sell signal should close the entire position for this strategy
+        # regardless of the quantity provided in the webhook
+        quantity_to_sell = strategy_position.quantity
         signal.quantity = quantity_to_sell
 
         mapped_symbol = map_symbol_to_alpaca(signal.symbol)
